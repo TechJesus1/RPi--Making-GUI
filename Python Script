@@ -1,0 +1,70 @@
+import RPi.GPIO as GPIO
+from tkinter import Tk, Label, Button
+
+# Define GPIO pins for LEDs
+blue_led_pin = 22
+red_led_pin = 17
+green_led_pin = 27
+
+# Setup GPIO pins
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(blue_led_pin, GPIO.OUT)
+GPIO.setup(red_led_pin, GPIO.OUT)
+GPIO.setup(green_led_pin, GPIO.OUT)
+
+def turn_on_led(pin):
+    GPIO.output(pin, True)
+
+def turn_off_led(pin):
+    GPIO.output(pin, False)
+
+def toggle_blue():
+    if GPIO.input(blue_led_pin):
+        turn_off_led(blue_led_pin)
+    else:
+        turn_on_led(blue_led_pin)
+    update_status()
+
+def toggle_red():
+    if GPIO.input(red_led_pin):
+        turn_off_led(red_led_pin)
+    else:
+        turn_on_led(red_led_pin)
+    update_status()
+
+def toggle_green():
+    if GPIO.input(green_led_pin):
+        turn_off_led(green_led_pin)
+    else:
+        turn_on_led(green_led_pin)
+    update_status()
+
+def update_status():
+    blue_status = "ON" if GPIO.input(blue_led_pin) else "OFF"
+    red_status = "ON" if GPIO.input(red_led_pin) else "OFF"
+    green_status = "ON" if GPIO.input(green_led_pin) else "OFF"
+    status_label.config(text=f"Blue: {blue_status}, Red: {red_status}, Green: {green_status}")
+
+# Create GUI window
+root = Tk()
+root.title("LED Control")
+
+# Labels
+status_label = Label(root, text="Status: ")
+status_label.pack()
+
+# Buttons for LED control
+blue_button = Button(root, text="Toggle Blue", command=toggle_blue)
+blue_button.pack()
+
+red_button = Button(root, text="Toggle Red", command=toggle_red)
+red_button.pack()
+
+green_button = Button(root, text="Toggle Green", command=toggle_green)
+green_button.pack()
+
+# Run the GUI
+root.mainloop()
+
+# Cleanup GPIO on program exit
+GPIO.cleanup() 
